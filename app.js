@@ -9,6 +9,8 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const { get } = require("https");
+const { WSATYPE_NOT_FOUND } = require("constants");
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -30,16 +32,25 @@ function getManager(){
         message: "What's your Email?",
         default: () => {},
         validate: function(email) {
+
             valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
 
-            if (valid) {
+            if (valid)
+            {
                 return true;
-            }else{
+            }
+            else
+            {
                 console.log(". Please enter a valid email address")
                 return false;
 
             }
         }
+   },
+   {
+    type: "input",
+    name: "officeNumber",
+    message: "What's your office phone number?", 
    },
    {
         type: "input",
@@ -59,18 +70,192 @@ if(data.team == "Y"){
             "Engineer"
         ]
     },
-]).then(function (data) {
-    if(data.role == "Intern"){
+]).then(function (data)
+{
+    if(data.role == "Intern")
+    {
         getIntern();
-    }else{
+    }
+    else
+    {
         getEngineer();
     }
 })
 }
 managerArray(data)
 });
+function managerArray(data){
+    const manager = new Manager(data.name, data.id, data.email, data.officeNumber)
 
+    employeeArray.push(manager)
+    rendermyEmployees()
 }
+
+function getEngineer(){
+    inquirer.prompt([{
+        type: "input",
+        name: "name",
+        message: "What's your name?"
+    },
+   {
+        type: "input",
+        name: "id", 
+        message: "What's your Employee ID?"
+   },
+   {
+        type: "input",
+        name: "email",
+        message: "What's your Email?",
+        default: () => {},
+        validate: function(email) {
+            valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+
+            if (valid) 
+            {
+                return true;
+            }
+            else
+            {
+                console.log(". Please enter a valid email address")
+                return false;
+
+            }
+        }
+   },
+   {
+       type: "input",
+       name: "git",
+       message: "What's your gitHub ID Username?",
+   },
+   {
+        type: "input",
+        name: "team", 
+        message: "Would you like to enter more members into?",
+   },
+])
+.then(function (data) {
+    if (data. team == "Y"){
+        inquirer.prompt([{
+            type: "checkbox",
+            name: "role", 
+            message: "What's the role of the member?",
+            chices: [
+                "Intern",
+                "Engineer"
+            ]
+        },
+    ])
+.then(function (data)
+{
+if (data.role == "Intern")
+{
+    getIntern()
+} 
+else if (data.role == "Engineer")
+{
+    getEngineer()
+}
+})
+}
+engineerArray(data)
+
+function engineerArray(data){
+    const engineer = new Engineer(data.name, data.id, data.email, data.git)
+    employeeArray.push(engineer)
+    rendermyEmployees()
+}
+})
+}
+
+function getIntern(){
+    inquirer.prompt([{
+        type: "input",
+        name: "neme",
+        message: "What's your Name?"
+    },
+
+    {
+        type: "input",
+        name: "id",
+        message: "What's your Employee ID?"   
+    },
+
+    {
+        type: "input",
+        name: "email",
+        message: "What is your email?",
+        default: () => {},
+        validate: function (email) {
+
+            valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+
+            if (valid) 
+            {
+                return true;
+            } 
+            else
+            {
+                console.log(".  Please enter a valid email")
+                return false;
+            }
+        }
+    },
+
+    {
+        type: "input",
+        name: "school",
+        message: "Which School you go to?",
+        
+    },
+
+    {
+        type: "input",
+        name: "team",
+        message: "Would you like to enter more members?",
+        
+    },
+    ])
+    .then(function (data){
+        if(data.team == "Y")
+        {
+           inquirer.prompt([{
+               type: "checkbox",
+               name: "role",
+               message: "What's your role?",
+               choices: [
+                   "Intern",
+                   "Engineer"
+               ]
+           },
+        ])
+        .then(function (data){
+            if(data.role == "Intern"){
+                getIntern()
+            }
+            else
+            {
+                getEngineer()
+            }
+        })}
+        internArray(data)
+    })}
+function internArray(data) {
+    const intern = new Intern(data.name, data.id, data.email, data.school)
+    employeeArray.push(Intern)
+    rendermyEmployees()
+}
+};
+function rendermyEmployees() {
+    fs.writeFileSync(outputPath, render(employeeArray),
+    function (err) {
+        if(err){
+         return console.log(err);
+        }
+    });
+}
+
+getManager()
+
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
