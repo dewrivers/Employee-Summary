@@ -15,7 +15,7 @@ const { WSATYPE_NOT_FOUND } = require("constants");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-function getManager(){
+let getManager = () => {
     inquirer.prompt([{
         type: "input",
         name: "name",
@@ -31,7 +31,7 @@ function getManager(){
         name: "email",
         message: "What's your Email?",
         default: () => {},
-        validate: function(email) {
+        validate: (email) => {
 
             valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
 
@@ -55,12 +55,12 @@ function getManager(){
    {
         type: "input",
         name: "team", 
-        message: "Would you like to enter more members into?",
+        message: "Would you like to enter more members into? YES/NO",
    },
 ])
 
-.then(function (data) {
-if(data.team == "Y"){
+.then((data) => {
+if(data.team == "YES"){
     inquirer.prompt([{
         type: "checkbox",
         name: "role",
@@ -70,7 +70,7 @@ if(data.team == "Y"){
             "Engineer"
         ]
     },
-]).then(function (data)
+]).then((data) =>
 {
     if(data.role == "Intern")
     {
@@ -84,14 +84,15 @@ if(data.team == "Y"){
 }
 managerArray(data)
 });
-function managerArray(data){
+let managerArray = (data) => {
+    let employeeArray = [];
     const manager = new Manager(data.name, data.id, data.email, data.officeNumber)
 
     employeeArray.push(manager)
-    rendermyEmployees()
+    rendermyEmployees(employeeArray);
 }
 
-function getEngineer(){
+let getEngineer = () => {
     inquirer.prompt([{
         type: "input",
         name: "name",
@@ -130,11 +131,11 @@ function getEngineer(){
    {
         type: "input",
         name: "team", 
-        message: "Would you like to enter more members into?",
+        message: "Would you like to enter more members into? YES/NO",
    },
 ])
-.then(function (data) {
-    if (data. team == "Y"){
+.then((data) => {
+    if (data. team == "YES"){
         inquirer.prompt([{
             type: "checkbox",
             name: "role", 
@@ -145,7 +146,7 @@ function getEngineer(){
             ]
         },
     ])
-.then(function (data)
+.then((data) =>
 {
 if (data.role == "Intern")
 {
@@ -159,15 +160,16 @@ else if (data.role == "Engineer")
 }
 engineerArray(data)
 
-function engineerArray(data){
+let engineerArray = (data) => {
+    let employeeArray = [];
     const engineer = new Engineer(data.name, data.id, data.email, data.git)
     employeeArray.push(engineer)
-    rendermyEmployees()
+    rendermyEmployees(employeeArray)
 }
 })
 }
 
-function getIntern(){
+let getIntern = () => {
     inquirer.prompt([{
         type: "input",
         name: "neme",
@@ -211,12 +213,12 @@ function getIntern(){
     {
         type: "input",
         name: "team",
-        message: "Would you like to enter more members?",
+        message: "Would you like to enter more members? YES/NO",
         
     },
     ])
-    .then(function (data){
-        if(data.team == "Y")
+    .then((data) => {
+        if(data.team == "YES")
         {
            inquirer.prompt([{
                type: "checkbox",
@@ -228,7 +230,7 @@ function getIntern(){
                ]
            },
         ])
-        .then(function (data){
+        .then((data) => {
             if(data.role == "Intern"){
                 getIntern()
             }
@@ -239,15 +241,20 @@ function getIntern(){
         })}
         internArray(data)
     })}
-function internArray(data) {
+let internArray = (data) => {
+    let employeeArray = [];
     const intern = new Intern(data.name, data.id, data.email, data.school)
-    employeeArray.push(Intern)
-    rendermyEmployees()
+    employeeArray.push(Intern);
+    
+    rendermyEmployees(employeeArray)
 }
 };
-function rendermyEmployees() {
-    fs.writeFileSync(outputPath, render(employeeArray),
-    function (err) {
+let rendermyEmployees = (employeeArray) => {
+    console.log("employeeArray: ", employeeArray);
+    let result = render(employeeArray);
+    console.log("result: ", result);
+    fs.writeFileSync(outputPath, result,
+    (err) => {
         if(err){
          return console.log(err);
         }

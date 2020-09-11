@@ -1,0 +1,59 @@
+
+/* ---------------------------------------- */
+/*  BODY STYLE  */
+/* ---------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+    margin-bottom:30em;
+    padding: 0;
+    font-size: 16px;
+    font-family: 'Grandstander', cursive;
+    background-image: url(LEGO.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+}
+h4{ 
+    text-align: right;
+}
+h2{ 
+    text-align: center;
+}
+
+/* ---------------------------------------- */
+/*  HEAD STYLE  */
+/* ---------------------------------------- */
+.team-heading{
+    color: white;
+    background-color: transparent;
+    
+    
+}
+/* ---------------------------------------- */
+/*  CARDS STYLE  */
+/* ---------------------------------------- */
+.card {
+    position: sticky;
+    box-shadow: rgba(60, 64, 67, 0.3) 0 1px 2px 0,
+    rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
+  
+}
+
+/* ---------------------------------------- */
+/*FOR MOBILE PHONES: */
+/* ---------------------------------------- */
+
+@media all and (max-width: 480px) {
+    
+    ul,li {
+        display: inline-flex;
+    }
+    .card{ 
+        align-items: center;
+    }
+}
