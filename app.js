@@ -11,11 +11,13 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 const { get } = require("https");
 const { WSATYPE_NOT_FOUND } = require("constants");
+const employeeArray =[]
 
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-let getManager = () => {
+///MANAGER FUNCTION TO ASK ALL THE INFO
+const getManager = () => {
     inquirer.prompt([{
         type: "input",
         name: "name",
@@ -51,26 +53,30 @@ let getManager = () => {
     type: "input",
     name: "officeNumber",
     message: "What's your office phone number?", 
-   },
-   {
-        type: "input",
-        name: "team", 
-        message: "Would you like to enter more members into? YES/NO",
-   },
+},
+{
+    type: "confirm",
+    name: "team", 
+    message: "Would you like to enter more members into? YES/NO",
+},
 ])
 
 .then((data) => {
-if(data.team == "YES"){
+    managerArray(data)
+console.log(data)
+if(data.team ){
     inquirer.prompt([{
-        type: "checkbox",
+        type: "list",
         name: "role",
         message: "What's your role?",
-        choice:[
+        choices:[
             "Intern",
             "Engineer"
         ]
     },
-]).then((data) =>
+])
+
+.then((data) =>
 {
     if(data.role == "Intern")
     {
@@ -81,18 +87,20 @@ if(data.team == "YES"){
         getEngineer();
     }
 })
+}else{
+    rendermyEmployees(employeeArray);
 }
-managerArray(data)
 });
-let managerArray = (data) => {
-    let employeeArray = [];
+}
+
+const managerArray = (data) => {
     const manager = new Manager(data.name, data.id, data.email, data.officeNumber)
 
     employeeArray.push(manager)
-    rendermyEmployees(employeeArray);
+    
 }
 
-let getEngineer = () => {
+const getEngineer = () => {
     inquirer.prompt([{
         type: "input",
         name: "name",
@@ -129,18 +137,19 @@ let getEngineer = () => {
        message: "What's your gitHub ID Username?",
    },
    {
-        type: "input",
+        type: "confirm",
         name: "team", 
         message: "Would you like to enter more members into? YES/NO",
    },
 ])
 .then((data) => {
-    if (data. team == "YES"){
+    engineerArray(data)
+    if (data.team){
         inquirer.prompt([{
-            type: "checkbox",
+            type: "list",
             name: "role", 
             message: "What's the role of the member?",
-            chices: [
+            choices: [
                 "Intern",
                 "Engineer"
             ]
@@ -150,29 +159,33 @@ let getEngineer = () => {
 {
 if (data.role == "Intern")
 {
+    console.log('Intern')
     getIntern()
 } 
-else if (data.role == "Engineer")
-{
+else {
+    console.log('Engineer')
     getEngineer()
 }
 })
-}
-engineerArray(data)
-
-let engineerArray = (data) => {
-    let employeeArray = [];
-    const engineer = new Engineer(data.name, data.id, data.email, data.git)
-    employeeArray.push(engineer)
+}else{
     rendermyEmployees(employeeArray)
 }
 })
 }
 
-let getIntern = () => {
+
+let engineerArray = (data) => {
+    //let employeeArray = [];
+    const engineer = new Engineer(data.name, data.id, data.email, data.git)
+    employeeArray.push(engineer)
+    //rendermyEmployees(employeeArray)
+}
+
+
+const getIntern = () => {
     inquirer.prompt([{
         type: "input",
-        name: "neme",
+        name: "name",
         message: "What's your Name?"
     },
 
@@ -211,17 +224,18 @@ let getIntern = () => {
     },
 
     {
-        type: "input",
+        type: "confirm",
         name: "team",
         message: "Would you like to enter more members? YES/NO",
         
     },
     ])
     .then((data) => {
-        if(data.team == "YES")
+        internArray(data)
+        if(data.team)
         {
            inquirer.prompt([{
-               type: "checkbox",
+               type: "list",
                name: "role",
                message: "What's your role?",
                choices: [
@@ -238,17 +252,26 @@ let getIntern = () => {
             {
                 getEngineer()
             }
-        })}
-        internArray(data)
-    })}
-let internArray = (data) => {
-    let employeeArray = [];
-    const intern = new Intern(data.name, data.id, data.email, data.school)
-    employeeArray.push(Intern);
+        })
+       
+    }else{
+        rendermyEmployees(employeeArray)
+    }
     
-    rendermyEmployees(employeeArray)
+    })
+}  
+
+let internArray = (data) => {
+    //let employeeArray = [];
+    const intern = new Intern(data.name, data.id, data.email, data.school)
+    employeeArray.push(intern);
+    
+    //rendermyEmployees(employeeArray)
 }
-};
+
+
+
+
 let rendermyEmployees = (employeeArray) => {
     console.log("employeeArray: ", employeeArray);
     let result = render(employeeArray);
