@@ -39,6 +39,5 @@ How do this app work?
 
 
 ### A video demonstrating the entirety of the app's functionality 
-
-
+https://drive.google.com/file/d/1bcP2RRPdzqAkgVQZaOhEk2LKopBWknGj/preview
 
